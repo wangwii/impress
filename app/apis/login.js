@@ -1,8 +1,8 @@
 import R from 'ramda';
 import req from 'superagent';
 
-import { Observable, from, of, throwError } from 'rxjs';
-import { switchMap, catchError, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 
 import config from '../config';
 
@@ -75,10 +75,10 @@ export default (req, res) => {
     const excludeCurrentUser = (u)=> u.unionid !== user.unionid;
 
     const users = [user].concat(userlist.filter(excludeCurrentUser).map(pickUserInfo));
-    res.json({ users, errcode: 0, errmsg: 'ok' });
+    res.json({ user, users, errcode: 0, errmsg: 'ok' });
   }
 
-  const getUserIdWithCode = getUserId(req.body.authCode);
+  const getUserIdWithCode = getUserId(req.body.auth_code);
   getToken.pipe(
     // tap(d => console.log('Got Token:', d)),
     switchMap(getUserIdWithCode),
